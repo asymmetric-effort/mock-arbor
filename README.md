@@ -36,5 +36,14 @@ Development
 - `make lint` — runs `go vet`
 - `make clean` — removes build and coverage artifacts
 
+Tagging (Semantic Versioning)
+- `make tag/patch` — bumps `vX.Y.Z` to `vX.Y.(Z+1)`
+- `make tag/minor` — bumps `vX.Y.Z` to `vX.(Y+1).0`
+- `make tag/major` — bumps `vX.Y.Z` to `v(X+1).0.0`
+- Behavior:
+  - Finds the highest tag matching `vMAJOR.MINOR.PATCH` (semantic version format).
+  - If no tags exist, it creates and pushes `v0.0.0` first, then creates the bumped tag.
+  - Creates annotated tags and pushes them to `origin`.
+
 Notes
 - If `TMS_HOSTKEY_FILE` does not exist, an RSA key is generated; best-effort persistence is attempted.
