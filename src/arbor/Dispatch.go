@@ -39,7 +39,7 @@ func Dispatch(line string) (string, int) {
     case strings.HasPrefix(cmd, "policy ") || strings.HasPrefix(cmd, "no policy "):
         return handlePolicy(raw), 0
 
-    case strings.HasPrefix(cmd, "terminal length "):
+    case strings.HasPrefix(cmd, "terminal length ") || util.EqualCmd(cmd, "terminal length"):
         return handleTerminal(cmd), 0
 
     case strings.HasPrefix(cmd, "services "):

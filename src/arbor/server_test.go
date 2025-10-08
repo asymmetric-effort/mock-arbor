@@ -115,9 +115,18 @@ func TestSSHExecCommands(t *testing.T) {
 	}
 	out, err = sess2.CombinedOutput("mitigation start")
 	_ = sess2.Close()
-	if err != nil || !strings.Contains(string(out), "Mitigation started (emulated)") {
-		t.Fatalf("mitigation start failed: err=%v out=%q", err, string(out))
-	}
+    if err != nil || !strings.Contains(string(out), "Mitigation started (emulated)") {
+        t.Fatalf("mitigation start failed: err=%v out=%q", err, string(out))
+    }
+
+    // unknown command should return non-zero
+    sess3, err := c.NewSession()
+    if err != nil { t.Fatalf("new session3: %v", err) }
+    out, err = sess3.CombinedOutput("bogus-cmd-xyz")
+    _ = sess3.Close()
+    if err == nil || !strings.Contains(string(out), "Unrecognized command") {
+        t.Fatalf("expected exec error and message; err=%v out=%q", err, string(out))
+    }
 }
 
 func TestSSHInteractiveHelpAndExit(t *testing.T) {
@@ -177,15 +186,21 @@ func TestSSHInteractiveHelpAndExit(t *testing.T) {
 		t.Fatalf("missing banner; got %q", out)
 	}
 
-	// Send help and expect prompt again
-	if _, err := stdin.Write([]byte("help\n")); err != nil {
-		t.Fatalf("write help: %v", err)
-	}
-	out = readUntilFromChan(t, dataCh, errCh, Prompt, 3*time.Second)
-	norm = strings.ReplaceAll(out, "\r\n", "\n")
-	if !strings.Contains(norm, "Available commands (emulated)") {
-		t.Fatalf("missing help output; got %q", out)
-	}
+    // Send blank line; expect prompt again
+    if _, err := stdin.Write([]byte("\n")); err != nil {
+        t.Fatalf("write blank: %v", err)
+    }
+    out = readUntilFromChan(t, dataCh, errCh, Prompt, 2*time.Second)
+
+    // Send help and expect prompt again
+    if _, err := stdin.Write([]byte("help\n")); err != nil {
+        t.Fatalf("write help: %v", err)
+    }
+    out = readUntilFromChan(t, dataCh, errCh, Prompt, 3*time.Second)
+    norm = strings.ReplaceAll(out, "\r\n", "\n")
+    if !strings.Contains(norm, "Available commands (emulated)") {
+        t.Fatalf("missing help output; got %q", out)
+    }
 
 	// Exit
 	if _, err := stdin.Write([]byte("exit\n")); err != nil {

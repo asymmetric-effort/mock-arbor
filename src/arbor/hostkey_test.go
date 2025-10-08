@@ -50,3 +50,14 @@ func TestLoadOrGenerateHostKeyEphemeralOnDir(t *testing.T) {
 		t.Fatalf("expected signer and persisted=false when path is a directory")
 	}
 }
+
+func TestLoadOrGenerateHostKeyBadPem(t *testing.T) {
+    dir := t.TempDir()
+    keyPath := filepath.Join(dir, "bad.pem")
+    if err := os.WriteFile(keyPath, []byte("not a valid pem"), 0o600); err != nil {
+        t.Fatalf("write: %v", err)
+    }
+    if _, _, err := LoadOrGenerateHostKey(keyPath); err == nil {
+        t.Fatalf("expected parse error for invalid pem")
+    }
+}
