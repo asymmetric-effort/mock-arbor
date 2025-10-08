@@ -9,8 +9,8 @@ import (
 // Dispatch takes a command line and returns (output, exitCode).
 // It implements a small set of TMS-like commands with static responses for tooling.
 func Dispatch(line string) (string, int) {
-	cmd := util.NormalizeSpaces(line)
-	switch {
+    cmd := util.NormalizeSpaces(line)
+    switch {
 	case util.EqualCmd(cmd, "help"), util.EqualCmd(cmd, "?"):
 		return Help(), 0
 
@@ -26,11 +26,14 @@ func Dispatch(line string) (string, int) {
 		util.EqualCmd(cmd, "copy running-config startup-config"):
 		return "Configuration saved (emulated).\n", 0
 
-	case strings.HasPrefix(cmd, "mitigation "):
-		return handleMitigation(cmd), 0
+    case strings.HasPrefix(cmd, "mitigation "):
+        return handleMitigation(cmd), 0
 
-	case util.EqualCmd(cmd, "clear counters"):
-		return "All counters cleared (emulated).\n", 0
+    case strings.HasPrefix(cmd, "services "):
+        return handleServices(cmd), 0
+
+    case util.EqualCmd(cmd, "clear counters"):
+        return "All counters cleared (emulated).\n", 0
 
 	default:
 		return fmt.Sprintf("%% Unrecognized command: %q\nType 'help' for a list of supported commands.\n", line), 1
