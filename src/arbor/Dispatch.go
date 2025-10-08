@@ -9,7 +9,8 @@ import (
 // Dispatch takes a command line and returns (output, exitCode).
 // It implements a small set of TMS-like commands with static responses for tooling.
 func Dispatch(line string) (string, int) {
-    cmd := util.NormalizeSpaces(line)
+    raw := strings.TrimSpace(line)
+    cmd := util.NormalizeSpaces(raw)
     switch {
 	case util.EqualCmd(cmd, "help"), util.EqualCmd(cmd, "?"):
 		return Help(), 0
@@ -28,6 +29,18 @@ func Dispatch(line string) (string, int) {
 
     case strings.HasPrefix(cmd, "mitigation "):
         return handleMitigation(cmd), 0
+
+    case util.EqualCmd(cmd, "mitigation list"):
+        return mitigationList(), 0
+
+    case strings.HasPrefix(cmd, "clear mitigation counters"):
+        return clearMitigationCounters(cmd), 0
+
+    case strings.HasPrefix(cmd, "policy ") || strings.HasPrefix(cmd, "no policy "):
+        return handlePolicy(raw), 0
+
+    case strings.HasPrefix(cmd, "terminal length "):
+        return handleTerminal(cmd), 0
 
     case strings.HasPrefix(cmd, "services "):
         return handleServices(cmd), 0
