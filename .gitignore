@@ -1,0 +1,46 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# Go build artifacts
+bin/
+build/
+dist/
+out/
+*.test
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test and coverage outputs
+coverage.out
+coverage.*.out
+*.coverprofile
+*.out
+
+# Logs and temp
+*.log
+logs/
+tmp/
+.tmp/
+.cache/
+.gocache/
+
+# Env and local overrides
+.env
+.env.*
+*.local
+
+# Keys and certs (avoid committing secrets)
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.csr
+hostkey.pem
