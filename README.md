@@ -3,7 +3,7 @@
 (c) 2025 Sam Caldwell <mail@samcaldwell.net>
 
 ## Latest Version: 
-[![Version](https://img.shields.io/github/v/tag/asymmetric-effort/mock-arbor?sort=semver)](https://asymmetric-effort/mock-arbor/tags)
+[![Version](https://img.shields.io/github/v/tag/asymmetric-effort/mock-arbor?sort=semver)](https://github.com/asymmetric-effort/mock-arbor/tags)
 
 Minimal SSH server that emulates an Arbor TMS-style CLI for testing and tooling. Supports interactive shell and 
 single-command exec with a small set of static responses. Not intended for production use.
